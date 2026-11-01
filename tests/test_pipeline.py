@@ -25,7 +25,7 @@ def test_message_roundtrip_and_simulated_clock(prediction):
 
 
 @pytest.mark.parametrize("field,value", [
-    ("schema_version", 2), ("schema_version", True), ("source", "real"), ("image_id", "../../escape"),
+    ("schema_version", 3), ("schema_version", True), ("source", "real"), ("image_id", "../../escape"),
     ("width", "96"), ("width", True), ("height", 0),
     ("captured_at", "2026-01-01T00:00:00"), ("captured_at", "not-a-date"),
     ("decision", "fail"), ("unexpected", "secret"),
@@ -78,7 +78,7 @@ def test_replay_is_idempotent_across_consumer_restart(tmp_path, prediction):
     publish_camera([prediction], second)
     assert first.inserted == second.duplicates == 1
     with sqlite3.connect(database) as connection:
-        assert connection.execute("SELECT COUNT(*) FROM inspections").fetchone()[0] == 1
+        assert connection.execute("SELECT COUNT(*) FROM inspections_v2").fetchone()[0] == 1
 
 
 def test_concurrent_replay_inserts_one_row(tmp_path, prediction):
@@ -138,11 +138,11 @@ def test_consumer_validates_then_commits_and_acknowledges(tmp_path, prediction):
     database = tmp_path / "results.sqlite"
     def confirm_committed_before_ack(*args):
         with sqlite3.connect(database) as connection:
-            assert connection.execute("SELECT COUNT(*) FROM inspections").fetchone()[0] == 1
+            assert connection.execute("SELECT COUNT(*) FROM inspections_v2").fetchone()[0] == 1
     client.ack.side_effect = confirm_committed_before_ack
     with patch("camera_quality.pipeline.mqtt.Client", return_value=client):
         consume(database)
     client.subscribe.assert_called_once_with(TOPIC, qos=1)
     assert client.ack.call_count == 3
     with sqlite3.connect(database) as connection:
-        assert connection.execute("SELECT COUNT(*) FROM inspections").fetchone()[0] == 1
+        assert connection.execute("SELECT COUNT(*) FROM inspections_v2").fetchone()[0] == 1

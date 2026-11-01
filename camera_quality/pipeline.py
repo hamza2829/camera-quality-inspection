@@ -16,9 +16,9 @@ from typing import Protocol
 import paho.mqtt.client as mqtt
 
 from camera_quality.generator import SIZE
-from camera_quality.messages import validate_message
+from camera_quality.messages import not_run_detector, validate_message
 
-TOPIC = "synthetic/camera-01/inspection/v1"
+TOPIC = "synthetic/camera-01/inspection/v2"
 
 
 class Publisher(Protocol):
@@ -32,18 +32,22 @@ def load_message(database: Path, payload: str | bytes) -> bool:
     digest = hashlib.sha256(canonical.encode()).hexdigest()
     database.parent.mkdir(parents=True, exist_ok=True)
     with sqlite3.connect(database, timeout=10) as connection:
-        connection.execute("""CREATE TABLE IF NOT EXISTS inspections (
+        connection.execute("""CREATE TABLE IF NOT EXISTS inspections_v2 (
             image_id TEXT PRIMARY KEY, captured_at TEXT NOT NULL,
             source TEXT NOT NULL CHECK(source = 'synthetic'), decision TEXT NOT NULL,
             opencv_decision TEXT NOT NULL, cnn_decision TEXT NOT NULL,
-            cnn_probability REAL NOT NULL, payload_sha256 TEXT NOT NULL, payload_json TEXT NOT NULL)""")
-        cursor = connection.execute("""INSERT INTO inspections VALUES (?,?,?,?,?,?,?,?,?)
+            cnn_probability REAL NOT NULL, yolo_status TEXT NOT NULL,
+            yolo_decision TEXT NOT NULL, yolo_boxes_json TEXT NOT NULL,
+            payload_sha256 TEXT NOT NULL, payload_json TEXT NOT NULL)""")
+        cursor = connection.execute("""INSERT INTO inspections_v2 VALUES (?,?,?,?,?,?,?,?,?,?,?,?)
             ON CONFLICT(image_id) DO NOTHING""", (
             message.image_id, message.captured_at, message.source, message.decision,
-            message.opencv.decision, message.cnn.decision, message.cnn.probability, digest, canonical))
+            message.opencv.decision, message.cnn.decision, message.cnn.probability,
+            message.yolo.status, message.yolo.decision,
+            json.dumps([box.model_dump() for box in message.yolo.boxes], sort_keys=True, allow_nan=False), digest, canonical))
         if cursor.rowcount == 1:
             return True
-        existing = connection.execute("SELECT payload_sha256 FROM inspections WHERE image_id=?", (message.image_id,)).fetchone()
+        existing = connection.execute("SELECT payload_sha256 FROM inspections_v2 WHERE image_id=?", (message.image_id,)).fetchone()
         if existing[0] != digest:
             raise ValueError("Conflicting payload for an existing image_id")
         return False
@@ -52,11 +56,12 @@ def load_message(database: Path, payload: str | bytes) -> bool:
 def make_message(prediction: dict, index: int) -> str:
     # Simulated, fixed clock: timestamps are not actual acquisition times.
     instant = datetime(2026, 1, 1, tzinfo=timezone.utc) + timedelta(seconds=index)
-    payload = dict(schema_version=1, image_id=prediction["image_id"],
+    detector = prediction.get("yolo", not_run_detector())
+    payload = dict(schema_version=2, image_id=prediction["image_id"],
                    camera_id="synthetic-camera-01", source="synthetic",
                    captured_at=instant.isoformat(), width=SIZE, height=SIZE,
-                   opencv=prediction["opencv"], cnn=prediction["cnn"],
-                   decision="fail" if "fail" in (prediction["opencv"]["decision"], prediction["cnn"]["decision"]) else "pass")
+                   opencv=prediction["opencv"], cnn=prediction["cnn"], yolo=detector,
+                   decision="fail" if "fail" in (prediction["opencv"]["decision"], prediction["cnn"]["decision"], detector["decision"]) else "pass")
     encoded = json.dumps(payload, allow_nan=False)
     validate_message(encoded)
     return encoded

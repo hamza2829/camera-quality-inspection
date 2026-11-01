@@ -4,12 +4,12 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "camera-quality-inspection"
-version = "0.1.0"
+version = "0.2.0"
 description = "Synthetic-only CPU vision and mocked MQTT-to-SQLite inspection example"
 requires-python = ">=3.11,<3.12"
 dependencies = [
   "numpy==2.2.6",
-  "opencv-python-headless==4.12.0.88",
+  "opencv-python==4.12.0.88",
   "torch==2.7.1",
   "paho-mqtt==2.1.0",
   "pydantic==2.11.7",
@@ -17,6 +17,7 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = ["pytest==8.4.1"]
+detector = ["ultralytics==8.3.169", "torchvision==0.22.1"]
 
 [tool.setuptools.packages.find]
 include = ["camera_quality*"]

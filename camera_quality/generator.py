@@ -9,6 +9,7 @@ import numpy as np
 
 SEED = 20261101
 SIZE = 96
+DEFECT_CLASSES = {"scratch": 0, "dent": 1, "hole": 2}
 FIELDS = ["image_id", "image_path", "split", "defect_type", "x", "y", "width", "height", "contrast", "noise_sigma"]
 
 
@@ -82,4 +83,27 @@ def generate_dataset(output: Path, counts: dict[str, int], seed: int = SEED) -> 
         writer = csv.DictWriter(handle, fieldnames=FIELDS)
         writer.writeheader()
         writer.writerows(rows)
+    export_yolo(output, rows)
     return rows
+
+
+def export_yolo(output: Path, rows: list[dict]) -> None:
+    """Add labels without touching pixels, CSV fields, RNG state, or splits.
+
+    Ultralytics accepts image lists and sibling .txt labels when there is no
+    /images/ path component. Clean images have empty .txt label files.
+    """
+    for row in rows:
+        label_path = (output / row["image_path"]).with_suffix(".txt")
+        line = ""
+        if row["defect_type"] != "none":
+            x, y, width, height = [int(row[key]) for key in ("x", "y", "width", "height")]
+            line = f"{DEFECT_CLASSES[row['defect_type']]} {(x+width/2)/SIZE:.9f} {(y+height/2)/SIZE:.9f} {width/SIZE:.9f} {height/SIZE:.9f}\n"
+        label_path.write_text(line, encoding="utf-8")
+    for split in ("train", "validation", "test"):
+        paths = [(output / row["image_path"]).resolve().as_posix() for row in rows if row["split"] == split]
+        (output / f"{split}.txt").write_text("\n".join(paths)+"\n", encoding="utf-8")
+    # JSON-quoted paths are valid YAML, including paths containing spaces.
+    import json
+    (output / "yolo.yaml").write_text(
+        f"path: {json.dumps(output.resolve().as_posix())}\ntrain: train.txt\nval: validation.txt\ntest: test.txt\nnames:\n  0: scratch\n  1: dent\n  2: hole\n", encoding="utf-8")

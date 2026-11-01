@@ -8,3 +8,6 @@ artifacts/
 *.sqlite*
 *.pt
 .env
+build/
+*.cache
+runs/

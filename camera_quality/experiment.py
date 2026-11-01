@@ -110,7 +110,7 @@ def run(output: Path, epochs=10, seed=SEED, counts=None):
     mock = MockMQTT(database)
     published = publish_camera(predictions, mock) + publish_camera(predictions, mock)
     with sqlite3.connect(database) as connection:
-        stored = connection.execute("SELECT COUNT(*) FROM inspections").fetchone()[0]
+        stored = connection.execute("SELECT COUNT(*) FROM inspections_v2").fetchone()[0]
     if stored != counts["test"] or mock.duplicates != counts["test"]:
         raise AssertionError("Mock replay was not idempotent")
     actual = labels["test"]
@@ -121,7 +121,7 @@ def run(output: Path, epochs=10, seed=SEED, counts=None):
                    cnn_threshold=threshold, classical_config=asdict(classical),
                    model_parameters=sum(p.numel() for p in model.parameters()),
                    training_seconds=duration, platform=platform.platform(),
-                   versions={name: importlib.metadata.version(name) for name in ("numpy", "opencv-python-headless", "torch", "paho-mqtt", "pydantic")},
+                   versions={name: importlib.metadata.version(name) for name in ("numpy", "opencv-python", "torch", "paho-mqtt", "pydantic")},
                    labels_sha256=hashlib.sha256((data / "labels.csv").read_bytes()).hexdigest(),
                    pipeline=dict(published=published, inserted=mock.inserted, duplicates=mock.duplicates, stored=stored),
                    errors_by_type={})

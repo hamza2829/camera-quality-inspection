@@ -33,8 +33,33 @@ class CNNResult(StrictModel):
     threshold: Probability
 
 
+class DetectionBox(StrictModel):
+    class_id: Annotated[int, Field(ge=0, le=2)]
+    class_name: Literal["scratch", "dent", "hole"]
+    confidence: Probability
+    x: Annotated[float, Field(ge=0, allow_inf_nan=False)]
+    y: Annotated[float, Field(ge=0, allow_inf_nan=False)]
+    width: Annotated[float, Field(gt=0, allow_inf_nan=False)]
+    height: Annotated[float, Field(gt=0, allow_inf_nan=False)]
+
+
+class DetectorResult(StrictModel):
+    status: Literal["evaluated", "not_run"]
+    model: Literal["yolov8n"] | None
+    initialization: Literal["coco_pretrained", "scratch", "not_run"]
+    weights_sha256: Annotated[str, Field(pattern=r"^[a-f0-9]{64}$")] | None
+    confidence_threshold: Probability
+    decision: Literal["pass", "fail", "not_run"]
+    boxes: Annotated[list[DetectionBox], Field(max_length=100)]
+
+
+def not_run_detector() -> dict:
+    return dict(status="not_run", model=None, initialization="not_run", weights_sha256=None,
+                confidence_threshold=.25, decision="not_run", boxes=[])
+
+
 class InspectionMessage(StrictModel):
-    schema_version: Literal[1]
+    schema_version: Literal[2]
     image_id: Annotated[str, Field(pattern=r"^sim-[a-f0-9]{24}$")]
     camera_id: Literal["synthetic-camera-01"]
     source: Literal["synthetic"]
@@ -43,6 +68,7 @@ class InspectionMessage(StrictModel):
     height: Annotated[int, Field(ge=8, le=4096)]
     opencv: ClassicalResult
     cnn: CNNResult
+    yolo: DetectorResult
     decision: Literal["pass", "fail"]
 
     @field_validator("schema_version", mode="before")
@@ -62,7 +88,22 @@ class InspectionMessage(StrictModel):
             raise ValueError("OpenCV decision disagrees with regions")
         if (self.cnn.decision == "fail") != (self.cnn.probability >= self.cnn.threshold):
             raise ValueError("CNN decision disagrees with threshold")
-        expected = "fail" if "fail" in (self.opencv.decision, self.cnn.decision) else "pass"
+        if self.yolo.status == "not_run":
+            if self.yolo.boxes or self.yolo.decision != "not_run" or self.yolo.model is not None or self.yolo.initialization != "not_run" or self.yolo.weights_sha256 is not None:
+                raise ValueError("Unevaluated detector must be explicitly not_run with no boxes/weights")
+        else:
+            if self.yolo.model is None or self.yolo.initialization == "not_run" or self.yolo.weights_sha256 is None:
+                raise ValueError("Evaluated detector requires model and weight provenance")
+            if (self.yolo.decision == "fail") != bool(self.yolo.boxes) or self.yolo.decision == "not_run":
+                raise ValueError("YOLO decision disagrees with boxes")
+        for box in self.yolo.boxes:
+            if box.class_name != ("scratch", "dent", "hole")[box.class_id]:
+                raise ValueError("Detector class id/name mismatch")
+            if box.confidence < self.yolo.confidence_threshold:
+                raise ValueError("Detector box below published confidence threshold")
+            if box.x+box.width > self.width+1e-6 or box.y+box.height > self.height+1e-6:
+                raise ValueError("Detector box outside image")
+        expected = "fail" if "fail" in (self.opencv.decision, self.cnn.decision, self.yolo.decision) else "pass"
         if self.decision != expected:
             raise ValueError("Combined decision must be fail if either method fails")
         for region in self.opencv.regions:
