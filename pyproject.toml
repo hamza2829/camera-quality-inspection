@@ -23,4 +23,4 @@ include = ["camera_quality*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-addopts = "-ra --basetemp=artifacts/pytest-tmp"
+addopts = "-ra --basetemp=.pytest-tmp"
