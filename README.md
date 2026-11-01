@@ -13,11 +13,55 @@ recorded, not hidden under the synthetic-data description. No Docker is needed.
 
 ## Results (real numbers from CI)
 
-The extension's hosted benchmark has not run yet. No YOLO accuracy or C++ speed
-numbers are claimed in this source commit; they will be copied from a real CI
-artifact after the workflow completes. The original OpenCV/CNN report remains
-available in [docs/evaluation.md](docs/evaluation.md), with its actual source run.
-[CI history](docs/ci-history.md) preserves failed runs as well as successful ones.
+[Extension CI run 41341879887](https://github.com/hamza2829/camera-quality-inspection/actions/runs/41341879887),
+commit `9f08c31`: **55 Python tests and 8 Google Tests passed**, with no failures,
+errors, or skipped Python tests. The full job took **2 minutes 8 seconds**.
+YOLO downloaded **COCO-pretrained weights** and fine-tuned for **5 CPU epochs in
+26.92 seconds**. Scratch fallback was not needed in this run.
+
+All current-method numbers below use the same 180 held-out synthetic images:
+90 clean, 30 scratches, 30 dents, 30 holes. Image precision/recall means pass/fail
+regardless of location or class. Detection mAP50 requires correct class and IoU
+>=0.5; it is N/A for methods without class-scored boxes.
+
+| Method | Image precision | Image recall | Detection mAP50 | Boxes overlapping truth at IoU >=0.5 |
+| --- | ---: | ---: | ---: | --- |
+| OpenCV, unchanged full inspector | 1.0000 | 0.5778 | N/A | 17 / 52 |
+| CNN, current retraining | 1.0000 | 0.7667 | N/A | N/A |
+| YOLOv8n | 1.0000 | 0.8333 | **0.8738** | **74 / 77** |
+| C++ stage (no morphology) | 1.0000 | 0.6111 | N/A | 16 / 56 |
+| CNN, original CI snapshot (historical) | 1.0000 | 0.8000 | N/A | N/A |
+
+Overlap is class-agnostic and counts boxes; YOLO matched **72/90 unique defects**.
+Class-aware, one-to-one YOLO counts at fixed confidence **0.25** are:
+
+| True defect | YOLO detection precision | YOLO detection recall | AP50 | TP / FP / FN |
+| --- | ---: | ---: | ---: | --- |
+| Scratch | 0.8889 | 0.8000 | 0.8538 | 24 / 3 / 6 |
+| Dent | 0.9000 | 0.6000 | 0.7725 | 18 / 2 / 12 |
+| Hole | 1.0000 | 1.0000 | 0.9950 | 30 / 0 / 0 |
+
+**YOLO is worse on dents than the original CNN snapshot:** 60% dent image recall
+versus the original CNN's 70%. In this extension run, retraining the CNN produced
+60% dent recall (a tie) and 76.67% overall recall. The unchanged image/CSV hash is
+verified; seeded training is not guaranteed bit-for-bit across builds/platforms.
+The [original report](docs/evaluation.md) is preserved instead of silently replacing
+its 80% overall CNN recall. The new report also compares per-type pass/fail recall;
+YOLO's stricter class-and-IoU detection recall is separately labeled.
+
+**C++ parity:** zero differing mask pixels and zero stage-box differences across
+all 180 images. Boxes differ from the original full inspector on 37 images due to
+different stages/rounding/area semantics. **C++ was slower in CI:** OpenCV reference
+stage **0.293 ms/image**, C++ compute **1.527 ms/image**, C++ single-image subprocess
+including PGM/JSON/parse **4.645 ms/image**. Both stage implementations run one thread;
+kernel means use three repeats per image. This is not a real-time claim.
+
+Schema-v2 mock replay inserted **180 rows** and ignored **180 duplicate replays**.
+See the [full report with confusion matrices and marked YOLO examples](docs/extended-evaluation.md),
+[machine-readable metrics](docs/extended-metrics.json), and the run's
+`synthetic-cpu-evaluation` artifact (30-day retention). These are source-labeled CI
+snapshots; the badge shows current status. [CI history](docs/ci-history.md) retains
+the earlier failed run; this extension's first hosted run passed.
 
 ## How it works
 

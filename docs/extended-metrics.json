@@ -1,0 +1,1194 @@
+{
+  "baseline": {
+    "seed": 20261101,
+    "split_sizes": {
+      "train": 600,
+      "validation": 180,
+      "test": 180
+    },
+    "epochs": 10,
+    "best_epoch": 10,
+    "source_commit": "9f08c31be0328396f3b233efe0bc4c6391f5b296",
+    "ci_run_url": "https://github.com/hamza2829/camera-quality-inspection/actions/runs/41341879887",
+    "cnn_threshold": 0.6,
+    "classical_config": {
+      "threshold": 8,
+      "min_area": 10
+    },
+    "model_parameters": 17409,
+    "training_seconds": 9.731580723999997,
+    "platform": "Linux-7.0.0-1017-azure-x86_64-with-glibc2.39",
+    "versions": {
+      "numpy": "2.2.6",
+      "opencv-python": "4.12.0.88",
+      "torch": "2.7.1+cpu",
+      "paho-mqtt": "2.1.0",
+      "pydantic": "2.11.7"
+    },
+    "labels_sha256": "408a456412ad255e32ae877a072106bb7c710c3977596170b101e0de07bee5cf",
+    "pipeline": {
+      "published": 360,
+      "inserted": 180,
+      "duplicates": 180,
+      "stored": 180
+    },
+    "errors_by_type": {
+      "none": {
+        "total": 90,
+        "opencv_errors": 0,
+        "cnn_errors": 0
+      },
+      "scratch": {
+        "total": 30,
+        "opencv_errors": 11,
+        "cnn_errors": 9
+      },
+      "dent": {
+        "total": 30,
+        "opencv_errors": 27,
+        "cnn_errors": 12
+      },
+      "hole": {
+        "total": 30,
+        "opencv_errors": 0,
+        "cnn_errors": 0
+      }
+    },
+    "opencv": {
+      "precision": 1.0,
+      "recall": 0.5777777777777777,
+      "f1": 0.732394366197183,
+      "accuracy": 0.7888888888888889,
+      "confusion_matrix": [
+        [
+          90,
+          0
+        ],
+        [
+          38,
+          52
+        ]
+      ]
+    },
+    "cnn": {
+      "precision": 1.0,
+      "recall": 0.7666666666666667,
+      "f1": 0.8679245283018869,
+      "accuracy": 0.8833333333333333,
+      "confusion_matrix": [
+        [
+          90,
+          0
+        ],
+        [
+          21,
+          69
+        ]
+      ]
+    },
+    "examples": {
+      "scratch": {
+        "image_id": "sim-80f6677488e03cdf9201e7a5",
+        "opencv": "fail",
+        "cnn": "fail"
+      },
+      "dent": {
+        "image_id": "sim-28aec3a2eb1394b4339f1719",
+        "opencv": "fail",
+        "cnn": "fail"
+      },
+      "hole": {
+        "image_id": "sim-59327a92890cbcfa3ee83444",
+        "opencv": "fail",
+        "cnn": "fail"
+      }
+    }
+  },
+  "yolo": {
+    "model": "yolov8n",
+    "epochs": 5,
+    "imgsz": 96,
+    "initialization": "coco_pretrained",
+    "initial_weights_url": "https://github.com/ultralytics/assets/releases/download/v8.3.0/yolov8n.pt",
+    "initial_weights_sha256": "f59b3d833e2ff32e194b5bb8e08d211dc7c5bdf144b90d2c8412c47ccfc83b36",
+    "download_error": null,
+    "weights_sha256": "ba299a49a130ad43d1fe662a4bdf2031bd651639d71fb51b7cbd52dd23f8fc4e",
+    "training_seconds": 26.917159814,
+    "freeze": 10,
+    "confidence_threshold": 0.25,
+    "nms_iou": 0.7,
+    "match_iou": 0.5,
+    "map50": 0.8737724584378087,
+    "per_class": {
+      "scratch": {
+        "tp": 24,
+        "fp": 3,
+        "fn": 6,
+        "ground_truth": 30,
+        "precision": 0.8888888888888888,
+        "recall": 0.8,
+        "ap50": 0.8538105363984676
+      },
+      "dent": {
+        "tp": 18,
+        "fp": 2,
+        "fn": 12,
+        "ground_truth": 30,
+        "precision": 0.9,
+        "recall": 0.6,
+        "ap50": 0.7725068389149583
+      },
+      "hole": {
+        "tp": 30,
+        "fp": 0,
+        "fn": 0,
+        "ground_truth": 30,
+        "precision": 1.0,
+        "recall": 1.0,
+        "ap50": 0.995
+      }
+    },
+    "localization": {
+      "predicted_boxes": 77,
+      "overlapping_boxes_iou50": 74,
+      "matched_defects_iou50": 72,
+      "ground_truth_defects": 90
+    }
+  },
+  "cpp_benchmark": {
+    "images": 180,
+    "repeats": 3,
+    "gaussian_kernel": 31,
+    "sigma": 5,
+    "threshold": 8,
+    "min_pixels": 10,
+    "python_threads": 1,
+    "cpp_threads": 1,
+    "opencv_ms_per_image": 0.2930826425922659,
+    "cpp_kernel_ms_per_image": 1.5272089296388887,
+    "cpp_subprocess_ms_per_image": 4.645393794444569,
+    "mask_pixels_different": 0,
+    "images_with_box_difference": 0,
+    "differences": [
+      {
+        "index": 0,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 1,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 2,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 3,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 4,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 5,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 6,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 7,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 8,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 9,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 10,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 11,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 12,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 13,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 14,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 15,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 16,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 17,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 18,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 19,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 20,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 21,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 22,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 23,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 24,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 25,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 26,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 27,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 28,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 29,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 30,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 31,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 32,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 33,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 34,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 35,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 36,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 37,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 38,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 39,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 40,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 41,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 42,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 43,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 44,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 45,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 46,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 47,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 48,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 49,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 50,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 51,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 52,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 53,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 54,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 55,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 56,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 57,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 58,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 59,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 60,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 61,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 62,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 63,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 64,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 65,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 66,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 67,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 68,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 69,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 70,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 71,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 72,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 73,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 74,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 75,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 76,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 77,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 78,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 79,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 80,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 81,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 82,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 83,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 84,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 85,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 86,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 87,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 88,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 89,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 90,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 91,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 92,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 93,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 94,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 95,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 96,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 97,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 98,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 99,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 100,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 101,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 102,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 103,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 104,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 105,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 106,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 107,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 108,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 109,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 110,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 111,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 112,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 113,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 114,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 115,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 116,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 117,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 118,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 119,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 120,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 121,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 122,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 123,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 124,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 125,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 126,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 127,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 128,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 129,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 130,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 131,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 132,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 133,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 134,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 135,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 136,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 137,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 138,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 139,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 140,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 141,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 142,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 143,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 144,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 145,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 146,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 147,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 148,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 149,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 150,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 151,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 152,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 153,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 154,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 155,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 156,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 157,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 158,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 159,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 160,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 161,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 162,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 163,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 164,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 165,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 166,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 167,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 168,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 169,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 170,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 171,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 172,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 173,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 174,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 175,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 176,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 177,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 178,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      },
+      {
+        "index": 179,
+        "differing_mask_pixels": 0,
+        "boxes_within_one_pixel": true
+      }
+    ]
+  },
+  "versions": {
+    "numpy": "2.2.6",
+    "opencv-python": "4.12.0.88",
+    "torch": "2.7.1+cpu",
+    "torchvision": "0.22.1+cpu",
+    "ultralytics": "8.3.169"
+  },
+  "image_metrics": {
+    "opencv": {
+      "precision": 1.0,
+      "recall": 0.5777777777777777,
+      "f1": 0.732394366197183,
+      "accuracy": 0.7888888888888889,
+      "confusion_matrix": [
+        [
+          90,
+          0
+        ],
+        [
+          38,
+          52
+        ]
+      ]
+    },
+    "cnn": {
+      "precision": 1.0,
+      "recall": 0.7666666666666667,
+      "f1": 0.8679245283018869,
+      "accuracy": 0.8833333333333333,
+      "confusion_matrix": [
+        [
+          90,
+          0
+        ],
+        [
+          21,
+          69
+        ]
+      ]
+    },
+    "yolo": {
+      "precision": 1.0,
+      "recall": 0.8333333333333334,
+      "f1": 0.9090909090909091,
+      "accuracy": 0.9166666666666666,
+      "confusion_matrix": [
+        [
+          90,
+          0
+        ],
+        [
+          15,
+          75
+        ]
+      ]
+    },
+    "cpp_stage": {
+      "precision": 1.0,
+      "recall": 0.6111111111111112,
+      "f1": 0.7586206896551725,
+      "accuracy": 0.8055555555555556,
+      "confusion_matrix": [
+        [
+          90,
+          0
+        ],
+        [
+          35,
+          55
+        ]
+      ]
+    }
+  },
+  "localization": {
+    "opencv": {
+      "predicted_boxes": 52,
+      "overlapping_boxes_iou50": 17,
+      "matched_defects_iou50": 17,
+      "ground_truth_defects": 90
+    },
+    "yolo": {
+      "predicted_boxes": 77,
+      "overlapping_boxes_iou50": 74,
+      "matched_defects_iou50": 72,
+      "ground_truth_defects": 90
+    },
+    "cpp_stage": {
+      "predicted_boxes": 56,
+      "overlapping_boxes_iou50": 16,
+      "matched_defects_iou50": 16,
+      "ground_truth_defects": 90
+    }
+  },
+  "legacy_box_difference_images": 37,
+  "yolo_image_recall_by_type": {
+    "scratch": 0.9,
+    "dent": 0.6,
+    "hole": 1.0
+  },
+  "pipeline": {
+    "published": 360,
+    "inserted": 180,
+    "duplicates": 180,
+    "stored": 180
+  },
+  "examples": {
+    "scratch": {
+      "image_id": "sim-80f6677488e03cdf9201e7a5",
+      "boxes": 1
+    },
+    "dent": {
+      "image_id": "sim-b9168bcc08f8ccc270dcde11",
+      "boxes": 1
+    },
+    "hole": {
+      "image_id": "sim-59327a92890cbcfa3ee83444",
+      "boxes": 1
+    }
+  }
+}

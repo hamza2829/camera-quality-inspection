@@ -35,3 +35,33 @@ errors are in the report; no test images were excluded from those metrics.
 Subsequent documentation pushes rerun all checks. The checked-in report is a
 snapshot of this explicit successful run, rather than a claim that every future
 CPU/platform run will have identical floating-point training results.
+
+## YOLO/C++ extension: passed
+
+[Run 41341879887](https://github.com/hamza2829/camera-quality-inspection/actions/runs/41341879887),
+commit `9f08c31be0328396f3b233efe0bc4c6391f5b296`: **55 Python tests passed**, with
+0 failures, 0 errors, 0 skipped (3.918 seconds in JUnit), and **8/8 Google Tests
+passed**. The Release CMake build, CPU training/evaluation, parity/benchmark,
+schema-v2 mock replay, and artifact upload succeeded. Full job duration: 2m8s.
+No new failed CI runs occurred before this extension snapshot.
+
+YOLOv8n downloaded COCO-pretrained weights and completed five CPU epochs in
+26.917 seconds. Held-out mAP50 was 0.8737724584; fixed-confidence class-aware
+precision/recall were scratch 0.8889/0.8000, dent 0.9000/0.6000, hole 1.0000/1.0000.
+74/77 boxes overlapped ground truth at IoU >=0.5, matching 72 unique defects.
+
+The CNN retraining in this run had overall recall 0.7667 and dent recall 0.6000,
+compared with the original snapshot's 0.8000 and 0.7000. YOLO dent image recall
+0.6000 is lower than that original CNN baseline, and tied with this run's CNN.
+The original PNG/CSV hash remains identical; floating-point training/validation
+selection can vary across builds and hardware. No seed, split, or threshold was
+tuned on test results to improve this comparison.
+
+C++ stage parity on all 180 test images had 0 mask-pixel differences and 0 box
+differences beyond one pixel. Original full-inspector boxes differed on 37 images.
+Mean timings: OpenCV stage 0.293083 ms/image; C++ compute 1.527209 ms/image;
+C++ subprocess/PGM/JSON/parse 4.645394 ms/image. The C++ tool was slower.
+
+The actual artifact supplied `extended-metrics.json`, `extended-evaluation.md`,
+and `yolo-examples/*.png`. Existing baseline snapshots remain intact. Documentation
+adds a labeled historical-comparison note to the generated extension report.
