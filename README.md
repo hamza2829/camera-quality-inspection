@@ -16,9 +16,37 @@ CNN is a binary image classifier, not a detector or defect-type classifier.
 
 ## Results (real numbers from CI)
 
-The hosted benchmark has not run yet. No accuracy or test totals are claimed in
-this initial source commit. This section and `docs/evaluation.md` will be populated
-from the actual GitHub Actions artifact after the first completed CPU run.
+[Measured CI run 41340065785](https://github.com/hamza2829/camera-quality-inspection/actions/runs/41340065785),
+source commit `da9e7fd`: **42 tests passed, 0 failures, 0 errors, 0 skipped**.
+Ten CPU training epochs took **7.53 seconds**, excluding installation and evaluation.
+The test set contains 180 held-out synthetic images: 90 clean and 90 defective.
+
+| Method | Precision | Recall | F1 | Confusion matrix |
+| --- | ---: | ---: | ---: | --- |
+| OpenCV | 1.0000 | 0.5778 | 0.7324 | `[[90, 0], [38, 52]]` |
+| Tiny CNN | 1.0000 | 0.8000 | 0.8889 | `[[90, 0], [18, 72]]` |
+
+Matrices use actual rows `[clean, defective]`, predicted columns `[pass, fail]`:
+`[[TN, FP], [FN, TP]]`. Positive means defective. The always-fail baseline has
+precision 0.5 and recall 1.0 on this balanced test set.
+
+OpenCV missed **11/30 scratches and 27/30 dents**; the CNN missed **9/30 scratches
+and 9/30 dents**. Both found all 30 holes and made no false alarms on the 90 clean
+test images. These results are from one synthetic seed/split, not evidence of
+factory performance. Platform-dependent CPU differences are possible: the local
+Windows run had a slightly different CNN result; these are the hosted Linux numbers.
+
+The mock pipeline made **360 publishes**, inserted **180 rows**, and recognized
+**180 duplicate replays**. This does not measure network or broker delivery.
+See the [evaluation report and three marked examples](docs/evaluation.md),
+[machine-readable CI metrics](docs/metrics.json), and the run's
+`synthetic-cpu-evaluation` artifact (retained for 30 days).
+
+**Actual failure history:** [the first CI attempt](https://github.com/hamza2829/camera-quality-inspection/actions/runs/41339919900)
+had **31 passed and 11 setup errors** due to a missing temporary-directory parent;
+training was skipped. The path was corrected without removing/skipping tests.
+[CI history](docs/ci-history.md) records the failure and successful rerun. The badge
+shows current status; the numbers above are a labeled, checked-in CI snapshot.
 
 ## How it works
 
